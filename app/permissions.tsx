@@ -7,10 +7,11 @@ import { usePermissions } from "../hooks/usePermissions";
 
 export default function PermissionsScreen() {
   const router = useRouter();
-  const { permissionStatus, isRequesting, requestPermissions } = usePermissions();
+  const { permissionStatus, isRequesting, requestPermissions } =
+    usePermissions();
 
   useEffect(() => {
-    if (permissionStatus === 'granted') {
+    if (permissionStatus === "granted") {
       // Auto-navigate if permissions are already granted
       setTimeout(() => {
         router.push("/devices");
@@ -29,8 +30,8 @@ export default function PermissionsScreen() {
             text: "Continue",
             onPress: () => {
               router.push("/devices");
-            }
-          }
+            },
+          },
         ]
       );
     }
@@ -43,13 +44,13 @@ export default function PermissionsScreen() {
       [
         {
           text: "Continue Anyway",
-          style: "default"
+          style: "default",
         },
         {
           text: "Grant Permissions",
           style: "default",
-          onPress: handleAllow
-        }
+          onPress: handleAllow,
+        },
       ]
     );
   };
@@ -66,10 +67,9 @@ export default function PermissionsScreen() {
             Device Discovery
           </Text>
           <Text className="text-gray-600 text-center leading-relaxed">
-            {permissionStatus === 'granted' 
-              ? 'Permissions granted! Setting up device discovery...'
-              : 'We need permission to find your baby monitoring devices'
-            }
+            {permissionStatus === "granted"
+              ? "Permissions granted! Setting up device discovery..."
+              : "We need permission to find your baby monitoring devices"}
           </Text>
         </View>
 
@@ -81,7 +81,8 @@ export default function PermissionsScreen() {
               <Icon name="bluetooth" size={32} color="#2563EB" />
             </View>
             <Text className="text-lg font-semibold text-gray-800 text-center mb-2">
-              Allow BabyGuard to find, connect to, and determine the relative position of nearby devices?
+              Allow BabyGuard to find, connect to, and determine the relative
+              position of nearby devices?
             </Text>
           </View>
 
@@ -92,7 +93,9 @@ export default function PermissionsScreen() {
                 <Icon name="devices" size={16} color="#059669" />
               </View>
               <View className="flex-1">
-                <Text className="text-gray-800 font-medium mb-1">Device Discovery</Text>
+                <Text className="text-gray-800 font-medium mb-1">
+                  Device Discovery
+                </Text>
                 <Text className="text-gray-600 text-sm leading-relaxed">
                   Find and connect to your baby monitoring devices automatically
                 </Text>
@@ -104,9 +107,25 @@ export default function PermissionsScreen() {
                 <Icon name="location" size={16} color="#2563EB" />
               </View>
               <View className="flex-1">
-                <Text className="text-gray-800 font-medium mb-1">Location Services</Text>
+                <Text className="text-gray-800 font-medium mb-1">
+                  Location Services
+                </Text>
                 <Text className="text-gray-600 text-sm leading-relaxed">
                   Determine device proximity for better monitoring accuracy
+                </Text>
+              </View>
+            </View>
+
+            <View className="flex-row items-start">
+              <View className="w-8 h-8 bg-red-100 rounded-full items-center justify-center mr-3 mt-1">
+                <Icon name="bell" size={16} color="#DC2626" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-gray-800 font-medium mb-1">
+                  Notifications
+                </Text>
+                <Text className="text-gray-600 text-sm leading-relaxed">
+                  Receive instant alerts when your baby needs attention
                 </Text>
               </View>
             </View>
@@ -116,7 +135,9 @@ export default function PermissionsScreen() {
                 <Icon name="shield" size={16} color="#7C3AED" />
               </View>
               <View className="flex-1">
-                <Text className="text-gray-800 font-medium mb-1">Secure Connection</Text>
+                <Text className="text-gray-800 font-medium mb-1">
+                  Secure Connection
+                </Text>
                 <Text className="text-gray-600 text-sm leading-relaxed">
                   Establish secure connections with your devices
                 </Text>
@@ -126,7 +147,7 @@ export default function PermissionsScreen() {
 
           {/* Action Buttons */}
           <View className="space-y-4">
-            {permissionStatus === 'granted' ? (
+            {permissionStatus === "granted" ? (
               <View className="py-5 px-8 rounded-2xl bg-green-100 border border-green-200">
                 <View className="flex-row items-center justify-center">
                   <Icon name="check" size={20} color="#059669" />
@@ -137,11 +158,13 @@ export default function PermissionsScreen() {
               </View>
             ) : (
               <>
-                <TouchableOpacity 
+                <TouchableOpacity
                   onPress={handleAllow}
                   disabled={isRequesting}
                   className={`py-5 px-8 rounded-2xl shadow-lg ${
-                    isRequesting ? 'bg-gray-300' : 'bg-gradient-to-r from-blue-500 to-purple-500'
+                    isRequesting
+                      ? "bg-gray-300"
+                      : "bg-gradient-to-r from-blue-500 to-purple-500"
                   } active:scale-95 transition-transform`}
                 >
                   <View className="flex-row items-center justify-center">
@@ -163,7 +186,7 @@ export default function PermissionsScreen() {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
+                <TouchableOpacity
                   onPress={handleDeny}
                   disabled={isRequesting}
                   className="bg-white border border-gray-200 py-4 px-8 rounded-2xl shadow-sm active:scale-95 transition-transform"
@@ -186,7 +209,7 @@ export default function PermissionsScreen() {
                 Your Privacy Matters
               </Text>
               <Text className="text-blue-700 text-sm leading-relaxed">
-                We only use these permissions to connect to your own devices. 
+                We only use these permissions to connect to your own devices.
                 Your data is encrypted and never shared with third parties.
               </Text>
             </View>
@@ -197,9 +220,7 @@ export default function PermissionsScreen() {
         <View className="mt-8">
           <Link href="/devices" asChild>
             <TouchableOpacity className="flex-row items-center justify-center py-4">
-              <Text className="text-gray-500 font-medium">
-                Skip for now
-              </Text>
+              <Text className="text-gray-500 font-medium">Skip for now</Text>
             </TouchableOpacity>
           </Link>
         </View>

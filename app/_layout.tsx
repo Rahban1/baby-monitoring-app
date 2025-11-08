@@ -1,8 +1,11 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
+import { useAlerts } from '../hooks/useAlerts';
 
 export default function RootLayout() {
+  // Initialize push & real-time alerts
+  useAlerts();
   return <SafeAreaProvider>
     <Stack>
       <Stack.Screen

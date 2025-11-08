@@ -1,5 +1,6 @@
-// PermissionService using Expo Location permissions for Expo Go
+// PermissionService using Expo Location and Notifications permissions for Expo Go
 import * as Location from 'expo-location';
+import * as Notifications from 'expo-notifications';
 
 class PermissionService {
   private static instance: PermissionService;
@@ -12,39 +13,52 @@ class PermissionService {
   }
 
   /**
-   * Check if foreground location permission is granted
+   * Check if required permissions are granted
    */
   async arePermissionsGranted(): Promise<boolean> {
     try {
-      const { status } = await Location.getForegroundPermissionsAsync();
-      return status === 'granted';
+      const locationStatus = (await Location.getForegroundPermissionsAsync()).status;
+      const notificationStatus = (await Notifications.getPermissionsAsync()).status;
+      
+      return locationStatus === 'granted' && notificationStatus === 'granted';
     } catch (error) {
-      console.error('Error checking location permission:', error);
+      console.error('Error checking permissions:', error);
       return false;
     }
   }
 
   /**
-   * Request foreground location permission with user-friendly flow
+   * Request all required permissions with user-friendly flow
    */
   async requestPermissionsWithFlow(): Promise<{ success: boolean; message: string }> {
     try {
-      const { status: currentStatus } = await Location.getForegroundPermissionsAsync();
-      if (currentStatus === 'granted') {
-        return { success: true, message: 'Location permission already granted' };
+      // Request Location Permission
+      const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+      if (locationStatus !== 'granted') {
+        return { success: false, message: 'Location permission is required for device discovery' };
       }
 
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === 'granted') {
-        return { success: true, message: 'Location permission granted' };
-      } else if (status === 'denied') {
-        return { success: false, message: 'Location permission denied' };
+      // Request Notification Permission
+      const { status: notificationStatus } = await Notifications.requestPermissionsAsync({
+        ios: {
+          allowAlert: true,
+          allowBadge: true,
+          allowSound: true,
+        },
+      });
+
+      if (notificationStatus !== 'granted') {
+        return { success: false, message: 'Notification permission is required for baby safety alerts' };
+      }
+
+      if (locationStatus === 'granted' && notificationStatus === 'granted') {
+        return { success: true, message: 'All permissions granted' };
       } else {
-        return { success: false, message: `Location permission status: ${status}` };
+        return { success: false, message: 'Some permissions were not granted' };
       }
     } catch (error) {
-      console.error('Error requesting location permission:', error);
-      return { success: false, message: 'Error requesting location permission' };
+      console.error('Error requesting permissions:', error);
+      return { success: false, message: 'Error requesting permissions' };
     }
   }
 }
